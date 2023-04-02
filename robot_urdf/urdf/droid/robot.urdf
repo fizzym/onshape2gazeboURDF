@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<robot name="droid">
+    <gazebo>
+        <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+            <robotNamespace>/rrbot</robotNamespace>
+            <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+        </plugin>
+    </gazebo>
+
+    <link name="base_link"></link>
+
+    <joint name="base_link_to_base" type="fixed">
+        <parent link="base_link"/>
+        <child link="body" />
+        <origin rpy="0.0 0 0" xyz="0 0 0"/>
+    </joint>
+
+    <link name="body">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 -0 0" />
+            <geometry>
+                <mesh filename="package://robot_urdf/urdf/droid/body_visual.stl"/>
+            </geometry>
+            <material name="body_material">
+                <color rgba="0.61568627450980395466 0.81176470588235294379 0.92941176470588238168 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 -0 0" />
+            <geometry>
+                <mesh filename="package://robot_urdf/urdf/droid/body_collision.stl"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <origin xyz="0.1350 0.1350 0.1350" rpy="0 0 0"/>
+            <mass value="208.4400" />
+            <inertia ixx="3.12660" ixy="0.0" ixz="0.0" iyy="3.1266" iyz="0" izz="3.1266" />
+        </inertial>
+    </link>
+
+    <link name="leg">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 -0 0" />
+            <geometry>
+                <mesh filename="package://robot_urdf/urdf/droid/leg_visual.stl"/>
+            </geometry>
+            <material name="leg_material">
+                <color rgba="0.64705882352941179736 0.64705882352941179736 0.64705882352941179736 1.0"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 -0 0" />
+            <geometry>
+                <mesh filename="package://robot_urdf/urdf/droid/leg_collision.stl"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <origin xyz="0.0682 0.0 0.0073" rpy="0 0 0"/>
+            <mass value="0.118" />
+            <inertia ixx="2.1214e-06" ixy="0.0" ixz="-1.551e-06" iyy="0.00023275" iyz="0.0" izz="0.00023260" />
+        </inertial>
+    </link>
+
+    <joint name="legbody" type="continuous">
+        <origin xyz="0.2875 0.1350 0.1350" rpy="1.5707 0.0 1.5707" />
+        <parent link="body" />
+        <child link="leg" />
+        <axis xyz="0 0 1"/>
+        <!-- <limit effort="1" velocity="20" />
+        <joint_properties friction="0.1"/> -->
+        <dynamics damping="0.1"/>
+    </joint>
+
+    <transmission name="tran1">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="legbody">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="motor1">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+
+</robot>
