@@ -24,11 +24,22 @@ https://cad.onshape.com/documents/75e4e9a14281c074ed3a2c75/w/d9cb7b18558eb661707
 * sudo apt install ros-noetic-effort-controllers
 
 ## Usage:
-Terminal 1:
-$ roslaunch robot_urdf launch_robot_urdf.launch
 
-Terminal 2:
-$ roslaunch robot_controller controller.launch
+Clone the repo in ros_ws/src
+```
+cd ros_ws/src
+git clone https://github.com/fizzym/onshape2gazeboURDF
+```
 
-Terminal 3:
-$ rostopic pub -1 /rrbot/joint1_position_controller/command std_msgs/Float64 "data: 3.0"
+Compile the packages and source the environment
+```
+cd ros_ws
+catkin_make
+source deve/setup.bas
+rospack profile
+```
+
+Run the packages:
+* Terminal 1: ```roslaunch robot_urdf launch_robot_urdf.launch```
+* Terminal 2: ```roslaunch robot_controller controller.launch```
+* Terminal 3: ```rostopic pub -1 /rrbot/joint1_position_controller/command std_msgs/Float64 "data: 3.0"```
